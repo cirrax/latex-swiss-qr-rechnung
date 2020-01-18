@@ -1,0 +1,55 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+#PACKAGE = latex-qrrechnung
+
+#DOCDIR = $(CURDIR)/debian/$(PACKAGE)/usr/share/doc/texmf
+#TEXMF = $(CURDIR)/debian/$(PACKAGE)/usr/share/texmf
+
+%:
+	dh $@ --with tex
+
+override_dh_auto_build: 
+	latexmk --pdf qrrechnung-definitions.dtx
+	latexmk --pdf qrrechnung-output.dtx
+	latexmk --pdf qrrechnung-swico.dtx
+	latexmk --pdf qrrechnung-translations.dtx
+
+clean:
+	rm -f *.aux
+	rm -f *.dvi
+	rm -f *.fdb_latexmk
+	rm -f *.fls
+	rm -f *.glo
+	rm -f *.hd
+	rm -f *.idx
+	rm -f *.ilg
+	rm -f *.ind
+	rm -f *.ins
+	rm -f *.log
+	rm -f *.out
+
+
+#build: 
+	# Add here commands to compile the package.
+#	$(MAKE)
+# Create style files
+#	latex qrrechnung-definitions.dtx
+#	latex qrrechnung-output.dtx
+#	latex qrrechnung-swico.dtx
+#	latex qrrechnung-translations.dtx
+# Create pdf
+#	pdflatex qrrechnung-definitions.dtx
+#	pdflatex qrrechnung-output.dtx
+#	pdflatex qrrechnung-swico.dtx
+#	pdflatex qrrechnung-translations.dtx
+#
+#clean:
+#	# Add here commands to clean up after the build process.
+#	rm -f *.aux *.log
+#	dh_clean 
+

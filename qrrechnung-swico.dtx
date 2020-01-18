@@ -1,0 +1,263 @@
+% \iffalse meta-comment
+% vim: textwidth=75
+%<*internal>
+\iffalse
+%</internal>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+-----------------------:| -------------------------------------------------
+       qrrechnung-swico:| provide swico (S1) bill information for qrrechnung
+                 Author:| Benedikt Trefzer
+                 E-mail:| benedikt.trefzer@cirrax.com
+                License:| Released under the LaTeX Project Public License v1.3c or later
+                    See:| http://www.latex-project.org/lppl.txt
+\endpreamble
+\postamble
+
+Copyright (C) 2020 by Benedikt Trefzer, Cirrax GmbH <benedikt.trefzer@cirrax.com>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+(not set).
+
+This work consists of the file qrrechnung-swico.dtx
+
+\endpostamble
+
+\usedir{tex/latex/qrrechnung-swico}
+\generate{
+  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/qrrechnung-swico}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+\usedir{doc/latex/qrrechnung-swico}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{qrrechnung-swico.dtx}
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<package>\ProvidesPackage{qrrechnung-swico}
+%<*package>
+    [2020/02/06 v1.00 A new LaTeX package]
+%</package>
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[a4paper,margin=25mm,left=50mm,nohead]{geometry}
+\usepackage[numbered]{hypdoc}
+\usepackage{\jobname}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \GetFileInfo{\jobname.dtx}
+% \DoNotIndex{\newcommand,\newenvironment}
+%
+%\title{\textsf{qrrechnung-swico} --- A new LaTeX package\thanks{This file
+%   describes version \fileversion, last revised \filedate.}
+%}
+%\author{Benedikt Trefzer, Cirrax GmbH\thanks{E-mail: benedikt.trefzer@cirrax.com}}
+%\date{Released \filedate}
+%
+%\maketitle
+%
+%\changes{v1.00}{2020/02/06}{First public release}
+%
+% \begin{abstract}
+% Provides swico syntax used in qrrechnung.sty.
+% \end{abstract}
+%
+% \section{Usage}
+%
+% only used in qrrechnung for swico S1.
+%
+%
+%\StopEventually{^^A
+%  \PrintChanges
+%  \PrintIndex
+%}
+%
+% \section{Implementation}
+%
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+
+% \begin{macro}{\qrrechnungSwicoBelegnummer}
+% number of the invoice.
+%    \begin{macrocode}
+\def\qrrSwico@Belegnummer{}
+\def\qrrechnungSwicoBelegnummer#1{
+  \ifthenelse{\equal{}{#1}}{
+    \def\qrrSwico@Belegnummer{}
+  }{
+    \def\qrrSwico@Belegnummer{/10/#1}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungSwicoBelegdatum}
+% date of the invoice.
+%    \begin{macrocode}
+\def\qrrSwico@Belegdatum{}
+\def\qrrechnungSwicoBelegdatum#1{
+  \ifthenelse{\equal{}{#1}}{
+    \def\qrrSwico@Belegdatum{}
+  }{
+    \def\qrrSwico@Belegdatum{/11/#1}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungSwicoKundenreferenz}
+% customer reference
+%    \begin{macrocode}
+\def\qrrSwico@Kundenreferenz{}
+\def\qrrechnungSwicoKundenreferenz#1{
+  \ifthenelse{\equal{}{#1}}{
+    \def\qrrSwico@Kundenreferenz{}
+  }{
+    \def\qrrSwico@Kundenreferenz{/20/#1}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungSwicoMwstNr}
+% Numeric ID of value added tax number (MWST-Nummer) of the provider.
+% Example: 106017086 for CHE-106.017.086
+%    \begin{macrocode}
+\def\qrrSwico@MwstNr{}
+\def\qrrechnungSwicoMwstNr#1{
+  \ifthenelse{\equal{}{#1}}{
+    \def\qrrSwico@MwstNr{}
+  }{
+    \def\qrrSwico@MwstNr{/30/#1}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungSwicoMwstDatum}
+% Service date for value added tax (Mehrwertsteuer)
+%    \begin{macrocode}
+\def\qrrSwico@MwstDatum{}
+\def\qrrechnungSwicoMwstDatum#1{
+  \ifthenelse{\equal{}{#1}}{
+    \def\qrrSwico@MwstDatum{}
+  }{
+    \def\qrrSwico@MwstDatum{/31/#1}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungSwicoMwstDetails}
+% Detail record for value added taxes (Mehrwertsteuer).
+%    \begin{macrocode}
+\def\qrrSwico@MwstDetails{}
+\def\qrrechnungSwicoMwstDetails#1{
+  \ifthenelse{\equal{}{#1}}{
+    \def\qrrSwico@MwstDetails{}
+  }{
+    \def\qrrSwico@MwstDetails{/32/#1}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungSwicoMwstEinfuhrsteuer}
+% value added taxes (Mehrwertsteuer) for import of goods.
+%    \begin{macrocode}
+\def\qrrSwico@MwstEinfuhrsteuer{}
+\def\qrrechnungSwicoMwstEinfuhrsteuer#1{
+  \ifthenelse{\equal{}{#1}}{
+    \def\qrrSwico@MwstEinfuhrsteuer{}
+  }{
+    \def\qrrSwico@MwstEinfuhrsteuer{/33/#1}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungSwicoKonditionen}
+% Set one or more conditions for payments. Reference date needs to be specified with |\qrrechnungSwicoBelegdatum|.
+%
+% Examples:
+% \begin{itemize}
+%   \item{0:30} 0\% skonto to be paid 30 days after reference date
+%   \item{2:10;0:60} 2\% skonto to be paid in 10 days, 0\% if paid in 60 days
+% \end{itemize}
+%
+%    \begin{macrocode}
+\def\qrrSwico@Konditionen{}
+\def\qrrechnungSwicoKonditionen#1{
+  \ifthenelse{\equal{}{#1}}{
+    \def\qrrSwico@Konditionen{}
+  }{
+    \def\qrrSwico@Konditionen{/40/#1}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungSwico}
+% This macro brings all the data together.
+% To use this data in the qr-bill, you can set |\qrrechnungRechnungsInfo{\qrrechnungSwico}| which will set the RechnungsInfo to the the swico encoded data.
+%    \begin{macrocode}
+\newcommand{\qrrechnungSwico}{
+  //S1%
+  \qrrSwico@Belegnummer%
+  \qrrSwico@Belegdatum%
+  \qrrSwico@Kundenreferenz%
+  \qrrSwico@MwstNr%
+  \qrrSwico@MwstDatum%
+  \qrrSwico@MwstDetails%
+  \qrrSwico@MwstEinfuhrsteuer%
+  \qrrSwico@Konditionen%
+}
+%    \end{macrocode}
+% \end{macro}
+
+
+\endinput
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+%\Finale

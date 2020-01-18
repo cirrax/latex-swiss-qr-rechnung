@@ -1,0 +1,394 @@
+% \iffalse meta-comment
+% vim: textwidth=75
+%<*internal>
+\iffalse
+%</internal>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+-----------------------:| -------------------------------------------------
+qrrechnung-definitions: | provide definitions and functions for qrrechnung
+                 Author:| Benedikt Trefzer
+                 E-mail:| benedikt.trefzer@cirrax.com
+                License:| Released under the LaTeX Project Public License v1.3c or later
+                    See:| http://www.latex-project.org/lppl.txt
+\endpreamble
+\postamble
+
+Copyright (C) 2020 by Benedikt Trefzer, Cirrax GmbH <benedikt.trefzer@cirrax.com>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+(not set).
+
+This work consists of the file qrrechnung-translations.dtx
+
+\endpostamble
+\usedir{tex/latex/qrrechnung-definitions}
+\generate{
+  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/qrrechnung-definitions}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+\usedir{doc/latex/qrrechnung-definitions}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{qrrechnung-definitions.dtx}
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<package>\ProvidesPackage{qrrechnung-definitions}
+%<*package>
+    [2020/02/06 v1.00 A new LaTeX package]
+%</package>
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[a4paper,margin=25mm,left=50mm,nohead]{geometry}
+\usepackage[numbered]{hypdoc}
+\usepackage{\jobname}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \GetFileInfo{\jobname.dtx}
+% \DoNotIndex{\newcommand,\newenvironment}
+%
+%\title{\textsf{qrrechnung-definitions} --- A new LaTeX package\thanks{This file
+%   describes version \fileversion, last revised \filedate.}
+%}
+%\author{Benedikt Trefzer, Cirrax GmbH\thanks{E-mail: benedikt.trefzer@cirrax.com}}
+%\date{Released \filedate}
+%
+%\maketitle
+%
+%\changes{v1.00}{2020/02/06}{First public release}
+%
+% \begin{abstract}
+% Provides definitions and functions for texts used in qrrechnung.sty.
+% \end{abstract}
+%
+% \section{Usage}
+%
+% only used in qrrechnung.
+%
+%
+%\StopEventually{^^A
+%  \PrintChanges
+%  \PrintIndex
+%}
+%
+% \section{Implementation}
+%
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+
+%    \begin{macrocode}
+\RequirePackage{xstring}
+\RequirePackage{ifthen}
+\RequirePackage{tikz}
+%    \end{macrocode}
+
+% \begin{macro}{\qrr@font}
+% select the font to use for text
+%    \begin{macrocode}
+\newcommand{\qrr@font}{
+% \fontfamily{phv}\selectfont
+  \fontspec{Liberation Sans}
+  %\fontspec{Arial}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@formatTitle}
+% format of the title
+%    \begin{macrocode}
+\newcommand{\qrr@formatTitle}[1] {
+  \qrr@font\fontsize{11pt}{11pt}\selectfont
+  \begin{bfseries}
+  #1%
+  \end{bfseries}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@formatSubTitleE}
+% format of the subtitle on the receipt
+%    \begin{macrocode}
+\newcommand{\qrr@formatSubTitleE}[1] {
+  \qrr@font\fontsize{6pt}{6pt}\selectfont   % minimum 6pt
+  \begin{bfseries}
+  #1%
+  \end{bfseries}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@formatSubTitleZ}
+% format of the subtitle on the payment part
+%    \begin{macrocode}
+\newcommand{\qrr@formatSubTitleZ}[1] {
+  \qrr@font\fontsize{8pt}{8pt}\selectfont   % minimum 6pt
+  \begin{bfseries}
+  #1%
+  \end{bfseries}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@formatAnnahmestelle}
+% format string
+%    \begin{macrocode}
+\newcommand{\qrr@formatAnnahmestelle}[1] {
+  \qrr@font\fontsize{6pt}{6pt}\selectfont    % minimum 2pt bigger than formatSubTitel
+  \begin{bfseries}
+  #1%
+  \end{bfseries}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@formatWeiterInformationen}
+%    \begin{macrocode}
+\newcommand{\qrr@formatWeitereInformationen}[1] {
+  \qrr@font\fontsize{7pt}{7pt}\selectfont    
+  #1%
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@formatTextE}
+%    \begin{macrocode}
+\newcommand{\qrr@formatTextE}[1] {
+  \qrr@font\fontsize{8pt}{8pt}\selectfont    % minimum 2pt bigger than formatSubTitel
+  #1%
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@formatTextZ}
+%    \begin{macrocode}
+\newcommand{\qrr@formatTextZ}[1] {
+  \qrr@font\fontsize{10pt}{10pt}\selectfont    % minimum 2pt bigger than formatSubTitel
+  #1%
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@box}
+% print a box with corners marks(used if Zahlungspflichtiger or Betrag is not set)
+%    \begin{macrocode}
+\newcommand{\qrr@box}[2]{
+   % #1 width
+   % #2 height
+   \begin{tikzpicture}
+     \draw (0mm,3mm)           -- (0mm,0mm) -- (3mm,0mm); %bottom left
+     \draw (0mm,#2 - 3mm)      -- (0mm, #2) -- (3mm,#2);  %top left
+     \draw (#1 - 3mm,0mm)          -- (#1, 0mm) -- (#1,3mm); %bottom right
+     \draw (#1 - 3mm,#2) -- (#1, #2)  -- (#1,#2-3mm); %top right
+   \end{tikzpicture}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@printifE}
+% Macro to only print the subtitle if there is some text (on receipt)
+%    \begin{macrocode}
+\newcommand{\qrr@printifE}[2]{
+    \ifthenelse{\isundefined{#2}}{}{
+    \qrr@formatSubTitleE{#1}\\
+    \qrr@formatTextE{#2}\\
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@printifZ}
+% Macro to only print the subtitle if there is some text (on payment part)
+%    \begin{macrocode}
+\newcommand{\qrr@printifZ}[2]{
+    \ifthenelse{\isundefined{#2}}{}{
+    \qrr@formatSubTitleZ{#1}\\
+    \qrr@formatTextZ{#2}\\
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@padding}
+% Macro to make groups of strings eg. to properly display referencenumber.
+% Starts on the right and inserts a delimiter (usually a space).
+% Parameters: number of chars to group together; string; char to use for padding;
+%    \begin{macrocode}
+\newcounter{qrrCpadding}
+\def\qrr@padding#1#2#3{
+   \StrLen{#2}[\len]
+   \setcounter{qrrCpadding}{\numexpr \len}
+   \StrSplit{#2}{0}{\pb}{\pa}
+   \loop
+     \addtocounter{qrrCpadding}{- #1}
+     \StrSplit{\pa#3\pb}{ \value{qrrCpadding} }{\pa}{\pb}
+   \ifnum\value{qrrCpadding} > 0
+   \repeat
+   \pb
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@paddingAmount}
+%    \begin{macrocode}
+\def\qrr@paddingAmount#1{
+   \StrLen{#1}[\len]
+   \StrSplit{#1}{\numexpr \len - 6}{\fr}{\rp}
+   \qrr@padding{3}{\fr}{\,}\rp
+}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\qrr@padqrref}
+% Macro add leading zeros to qrreference to have 27 characters.
+%    \begin{macrocode}
+\newcommand{\qrr@padqrref}[1]{ % #1 = refnumber
+ \StrLen{#1}[\len]
+ \ifnum\len<27%
+   \qrr@padqrref{0#1}
+ \else 
+   \def\RefPadded{#1}%
+ \fi
+}
+
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@checksum}
+% Macro to calculate the checksum of a number modulo 10 recursive.
+% Output is the number plus the checksum.
+%    \begin{macrocode}
+\newcounter{checksumX}
+\newcounter{checksumC}
+\newcounter{checksumZ}
+\newcommand{\qrr@checksum}[1]{
+  \StrLen{#1}[\reflen]
+  \setcounter{checksumX}{0}
+  \setcounter{checksumC}{0}
+   \loop
+     \addtocounter{checksumX}{1}
+     \StrChar{#1}{\value{checksumX}}[\checksumZZ]
+     \setcounter{checksumZ}{\checksumZZ + \value{checksumC}}
+
+     \IfStrEq{0} {\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{0} }{}
+     \IfStrEq{10}{\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{0} }{}
+     \IfStrEq{1} {\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{9} }{}
+     \IfStrEq{11}{\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{9} }{}
+     \IfStrEq{2} {\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{4} }{}
+     \IfStrEq{12}{\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{4} }{}
+     \IfStrEq{3} {\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{6} }{}
+     \IfStrEq{13}{\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{6} }{}
+     \IfStrEq{4} {\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{8} }{}
+     \IfStrEq{14}{\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{8} }{}
+     \IfStrEq{5} {\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{2} }{}
+     \IfStrEq{15}{\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{2} }{}
+     \IfStrEq{6} {\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{7} }{}
+     \IfStrEq{16}{\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{7} }{}
+     \IfStrEq{7} {\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{1} }{}
+     \IfStrEq{17}{\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{1} }{}
+     \IfStrEq{8} {\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{3} }{}
+     \IfStrEq{18}{\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{3} }{}
+     \IfStrEq{9} {\the\numexpr\value{checksumZ}}{ \setcounter{checksumC}{5} }{}
+
+     \ifnum\value{checksumX} < \reflen
+       \repeat
+   \IfStrEq{0} {\the\numexpr\value{checksumC}}{\def\RefFull{#10}}{}
+   \IfStrEq{1} {\the\numexpr\value{checksumC}}{\def\RefFull{#19}}{}
+   \IfStrEq{2} {\the\numexpr\value{checksumC}}{\def\RefFull{#18}}{}
+   \IfStrEq{3} {\the\numexpr\value{checksumC}}{\def\RefFull{#17}}{}
+   \IfStrEq{4} {\the\numexpr\value{checksumC}}{\def\RefFull{#16}}{}
+   \IfStrEq{5} {\the\numexpr\value{checksumC}}{\def\RefFull{#15}}{}
+   \IfStrEq{6} {\the\numexpr\value{checksumC}}{\def\RefFull{#14}}{}
+   \IfStrEq{7} {\the\numexpr\value{checksumC}}{\def\RefFull{#13}}{}
+   \IfStrEq{8} {\the\numexpr\value{checksumC}}{\def\RefFull{#12}}{}
+   \IfStrEq{9} {\the\numexpr\value{checksumC}}{\def\RefFull{#11}}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnung@EzahlungsempfaengerQR}
+% This is a dummy function for the final receipient, a data group, that is
+% currently unused accoring to standard version 2.1
+%    \begin{macrocode}
+\newcommand{\qrrechnung@EzahlungsempfaengerQR}{
+     \?% typ
+     \?% name
+     \?% adresse1
+     \?% adresse2
+     \?% plz
+     \?% ort
+     \?% land
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@qrcodetext}
+% This is the actual text, that is merged into the qrcode.
+%    \begin{macrocode}
+\newcommand{\qrr@qrcodetext}{
+  SPC\?                                  % QRtype
+  0200\?                                 % Version
+  1\?                                    % CodingType (UTF-8 Latin Characters)
+  \qrrechnung@ibanQR                         % IBAN or QR-IBAN
+  \qrrechnung@zahlungsempfaengerQR             % Empfänger
+  \qrrechnung@EzahlungsempfaengerQR             % endgültigrt Empfänger
+  \qrrechnung@betragQR                         % Betrag
+  \qrrechnung@waehrungQR                       % Waehrung
+  \qrrechnung@zahlungspflichtigerQR            % zahlungpflichtiger
+  \qrrechnung@referenzQR                       % Referenznummer
+  \qrrechnung@unstrukturierteinfoQR            % unstrukturierte Mitteilung
+  EPD\?                                  % Trailer
+  \qrrechnung@rechnungsinfoQR            % Rechnungsinformation
+  \qrrechnugn@AVerfahrenAQR              % Alternatives verfahren 1
+  \qrrechnugn@AVerfahrenBQR              % Alternatives verfahren 2
+}
+%    \end{macrocode}
+% \end{macro}
+
+\endinput
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+%\Finale
+
+

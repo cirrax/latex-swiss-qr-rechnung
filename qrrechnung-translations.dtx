@@ -1,0 +1,256 @@
+% \iffalse meta-comment
+% vim: textwidth=75
+%<*internal>
+\iffalse
+%</internal>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+-----------------------:| -------------------------------------------------
+qrrechnung-translations:| provide translations for qrrechnung
+                 Author:| Benedikt Trefzer
+                 E-mail:| benedikt.trefzer@cirrax.com
+                License:| Released under the LaTeX Project Public License v1.3c or later
+                    See:| http://www.latex-project.org/lppl.txt
+\endpreamble
+\postamble
+
+Copyright (C) 2020 by Benedikt Trefzer, Cirrax GmbH <benedikt.trefzer@cirrax.com>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+(not set).
+
+This work consists of the file qrrechnung-translations.dtx
+
+\endpostamble
+
+\usedir{tex/latex/qrrechnung-translations}
+\generate{
+  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/qrrechnung-translations}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+\usedir{doc/latex/qrrechnung-translations}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{qrrechnung-translations.dtx}
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<package>\ProvidesPackage{qrrechnung-translations}
+%<*package>
+    [2020/02/06 v1.00 A new LaTeX package]
+%</package>
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[a4paper,margin=25mm,left=50mm,nohead]{geometry}
+\usepackage[numbered]{hypdoc}
+\usepackage{\jobname}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \GetFileInfo{\jobname.dtx}
+% \DoNotIndex{\newcommand,\newenvironment}
+%
+%\title{\textsf{qrrechnung-translations} --- A new LaTeX package\thanks{This file
+%   describes version \fileversion, last revised \filedate.}
+%}
+%\author{Benedikt Trefzer, Cirrax GmbH\thanks{E-mail: benedikt.trefzer@cirrax.com}}
+%\date{Released \filedate}
+%
+%\maketitle
+%
+%\changes{v1.00}{2020/02/06}{First public release}
+%
+% \begin{abstract}
+% Provides translations for texts used in qrrechnung.sty.
+% \end{abstract}
+%
+% \section{Usage}
+%
+% only used in qrrechnung for translations.
+%
+%
+%\StopEventually{^^A
+%  \PrintChanges
+%  \PrintIndex
+%}
+%
+% \section{Implementation}
+%
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+
+% \begin{macro}{\qrrT@Empfangsteil}
+%    \begin{macrocode}
+\newcommand{\qrrT@Empfangsteil}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Empfangsschein}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Récépissé}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Ricevuta}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Receipt}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrT@Zahlteil}
+%    \begin{macrocode}
+\newcommand{\qrrT@Zahlteil}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Zahlteil}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Section paiement}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Sezione pagamento}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Payment part}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrT@Konto}
+%    \begin{macrocode}
+\newcommand{\qrrT@Konto}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Konto / Zahlbar an}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Compte / Payable à}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Conto / Pagabila a}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Account / Payable to}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrT@Zahlungsemfaenger}
+%    \begin{macrocode}
+\newcommand{\qrrT@Zahlungsempfaenger}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Zahlungsempfänger}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Bénéficiaire}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Beneficiario}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Creditor}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrT@EndgueltigerZahlungsemfaenger}
+%    \begin{macrocode}
+\newcommand{\qrrT@EndgueltigerZahlungsempfaenger}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Endgültiger Zahlungsempfänger}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Bénéficiaire final}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Beneficiario finale}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Ultimate creditor}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrT@Referenz}
+%    \begin{macrocode}
+\newcommand{\qrrT@Referenz}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Referenz}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Référence}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Riferimento}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Reference}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrT@ZusaetzlicheInformationen}
+%    \begin{macrocode}
+\newcommand{\qrrT@ZusaetzlicheInformationen}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Zusätzliche Informationen}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Informations supplémentaires}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Informazioni supplementari}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Additional information}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrT@Zahlungspflichtiger}
+%    \begin{macrocode}
+\newcommand{\qrrT@Zahlungspflichtiger}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Zahlbar durch}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Payable par}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Pagabile da}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Payable by}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrT@ZahlungspflichtigerLeer}
+%    \begin{macrocode}
+\newcommand{\qrrT@ZahlungspflichtigerLeer}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Zahlbar durch (Name/Addresse)}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Payable par (nom/adresse)}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Pagabile da (nome/indirizzo)}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Payable by (name/address)}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrT@Waehrung}
+%    \begin{macrocode}
+\newcommand{\qrrT@Waehrung}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Währung}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Monnaie}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Valuta}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Currency}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrT@Betrag}
+%    \begin{macrocode}
+\newcommand{\qrrT@Betrag}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Betrag}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Montant}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Importo}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Amount}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrT@Annahmestelle}
+%    \begin{macrocode}
+\newcommand{\qrrT@Annahmestelle}{
+  \ifthenelse{\equal{\qrrechnungLang}{de}}{Annahmestelle}{}
+  \ifthenelse{\equal{\qrrechnungLang}{fr}}{Point de dépôt}{}
+  \ifthenelse{\equal{\qrrechnungLang}{it}}{Punto di accettazione}{}
+  \ifthenelse{\equal{\qrrechnungLang}{en}}{Acceptance point}{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+\endinput
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+%\Finale

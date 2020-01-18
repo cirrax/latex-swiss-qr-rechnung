@@ -1,0 +1,247 @@
+
+
+\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+\ProvidesPackage{qrrechnung}
+  [2018/01/01 v0.0.1 'QR-Rechnung' positioning package]
+%\RequirePackage[absolute,overlay,showboxes]{textpos}
+\RequirePackage{qrrechnung-translations}
+\RequirePackage{qrrechnung-definitions}
+\RequirePackage{qrrechnung-output}
+%\RequirePackage[absolute,overlay]{textpos}
+\RequirePackage{ifthen}
+\RequirePackage{calc}
+\RequirePackage{microtype}
+\RequirePackage[nolinks]{qrcode}
+\RequirePackage{fontspec}
+\RequirePackage{pifont}
+\RequirePackage{rotating}
+\RequirePackage{tikz}
+\RequirePackage{xstring}
+\RequirePackage{calc}
+
+
+% qrrechnung parameters
+% undefined if not set !
+\def\qrrechnung@betrag{}
+\def\qrrechnungBetrag#1#2{
+  \def\qrrechnung@betrag{#1}
+  \def\qrrechnung@betragQR{
+    #1 \?
+  }
+  \def\qrrechnung@waehrung{#2}
+  \def\qrrechnung@waehrungQR{
+    #2 \?
+  }
+}
+\def\qrrechnungIBAN#1{
+  \StrDel{#1}{ }[\IbanZ]          % remove spaces
+  \StrLeft{\IbanZ}{21}[\Iban]     % ensure 21 chars
+  \StrLeft{\Iban}{4}[\IbanA]      % first quadrupel
+  \StrMid{\Iban}{5}{8}[\IbanB]
+  \StrMid{\Iban}{9}{12}[\IbanC]
+  \StrMid{\Iban}{13}{16}[\IbanD]
+  \StrMid{\Iban}{17}{20}[\IbanE]
+  \StrRight{\Iban}{1}[\IbanF]
+  \def\qrrechnung@iban{\IbanA\,\IbanB\,\IbanC\,\IbanD\,\IbanE\,\IbanF}
+  \def\qrrechnung@ibanQR{
+    \Iban \?
+  }
+}
+
+\def\qrrechnungZahlungsempfaenger#1#2#3#4{
+% #1 Name (firstname + lastname or company name) (max 70 chars)
+% #2 address line 1
+% #3 postal code and town
+% #4 Two digit country code according to ISO-3166-1
+%
+% Remark: only combined format is supported currently
+  \StrLeft{#1}{70}[\ZEname]
+  \StrLeft{#2}{70}[\ZEaddrA]
+  \StrLeft{#3}{70}[\ZEaddrB]
+  \StrLeft{#4}{2}[\ZEctry]
+  \def\qrrechnung@zahlungsempfaenger{
+    \ZEname \\
+    \ZEaddrA \\
+    \ZEaddrB
+  }
+  \StrSubstitute{\ZEname}{ }{\ }[\ZEnameQR]
+  \StrSubstitute{\ZEaddrA}{ }{\ }[\ZEaddrAQR]
+  \StrSubstitute{\ZEaddrB}{ }{\ }[\ZEaddrBQR]
+  \def\qrrechnung@zahlungsempfaengerQR{
+    K \?
+    \ZEnameQR \?
+    \ZEaddrAQR \?
+    \ZEaddrBQR \?
+    \?
+    \?
+    \ZEctry \?
+  }
+}
+\def\qrrechnung@referenzQR{
+  NON \?
+}
+
+\def\qrrechnungReferenz#1#2{
+% #1 Reference type
+%    QRR: QR reference (26 characters, without check sum (will be calculated with latex)
+%    SCOR: Creditor refererence  (ISO 11649)
+%    NON: without reference
+% #2 reference either QRR or SCOR, ignored for NON
+  \ifthenelse{\equal{#1}{QRR}}{
+    \StrLeft{#2}{26}[\Referenz]
+    \qrr@checksum{\Referenz} % defines \RefFull
+    \qrr@padqrref{\RefFull}  % defines \RefPadded
+    \def\qrrechnung@referenz{ 
+      \qrr@padding{5}{\RefPadded}{\,}\\
+    }
+    \def\qrrechnung@referenzQR{
+      QRR \?%
+      \RefPadded\?%
+    }
+  }{}
+  \ifthenelse{\equal{#1}{SCOR}}{
+    \StrLeft{#2}{25}[\Referenz]
+    \def\qrrechnung@referenz{\Referenz}
+    \def\qrrechnung@referenzQR{
+      SCOR \?
+      \Referenz \?
+    }
+  }{}
+}
+
+\def\qrrechnung@unstrukturierteinfoQR{\?}
+\def\qrrechnungUnstrukturierteInfo#1{
+    \StrLeft{#1}{140}[\WI]
+    \StrSubstitute{\WI}{ }{\ }[\WIQR]
+  \def\qrrechnung@unstrukturierteinfoQR{
+    \WIQR \?
+  }
+  \def\qrrechnung@unstrukturierteinfo{\WI}
+  \def\qrrechnung@printzusatz{}
+}
+
+\def\qrrechnung@rechnungsinfoQR{\?}
+\def\qrrechnungRechnungsInfo#1{
+  \StrLeft{#1}{140}[\RI]
+  \def\qrrechnung@rechnungsinfoQR{
+    \RI \?
+  }
+  \def\qrrechnung@rechnungsinfo{\RI}
+  \def\qrrechnung@printzusatz{}
+}
+
+\def\qrrechnung@zusatzinfo{
+  \ifthenelse{\isundefined{\qrrechnung@unstrukturierteinfo}{}}{}{
+    \qrrechnung@unstrukturierteinfo\\
+  }
+  \ifthenelse{\isundefined{\qrrechnung@rechnungsinfo}{}}{}{
+    \qrrechnung@rechnungsinfo\\
+  }
+}
+
+% preparation for alternatives, this will probably change !
+\def\qrrechnugn@AVerfahrenAQR{} 
+\def\qrrechnugn@AVerfahrenA{}
+\def\qrrechnugn@AVerfahrenAname{}
+\def\qrrechnungAVerfahrenA#1#2{
+  \StrLeft{#2}{100}[\AVerfahrenA]
+  \def\qrrechnugn@AVerfahrenAQR{
+    \AVerfahrenA \?
+  } 
+  \def\qrrechnugn@AVerfahrenA{
+    \AVerfahrenA
+  }
+  \def\qrrechnugn@AVerfahrenAname{
+    #1
+  }
+}
+
+\def\qrrechnugn@AVerfahrenBQR{}
+\def\qrrechnugn@AVerfahrenB{}
+\def\qrrechnugn@AVerfahrenBname{}
+\def\qrrechnungAVerfahrenB#1#2{
+  \StrLeft{#2}{100}[\AVerfahrenB]
+  \def\qrrechnugn@AVerfahrenBQR{
+    \AVerfahrenB \?
+  } 
+  \def\qrrechnugn@AVerfahrenB{
+    \AVerfahrenB
+  }
+  \def\qrrechnugn@AVerfahrenBname{
+    #1
+  }
+}
+  
+
+\def\qrrechnung@zahlungspflichtiger{}
+\def\qrrechnung@zahlungspflichtigerQR{}
+\def\qrrechnungZahlungspflichtiger#1#2#3#4{
+% #1 Name (firstname + lastname or company name) (max 70 chars)
+% #2 address line 1
+% #3 postal code and town
+% #4 Two digit country code according to ISO-3166-1
+%
+% Remark: only combined format is supported currently
+  \ifthenelse{\equal{#1}{}}{
+    \def\qrrechnung@zahlungspflichtiger{}
+    \def\qrrechnung@zahlungspflichtigerQR{
+    }
+  }{
+    \StrLeft{#1}{70}[\ZPname]
+    \StrLeft{#2}{70}[\ZPaddrA]
+    \StrLeft{#3}{70}[\ZPaddrB]
+    \StrLeft{#4}{2}[\ZPctry]
+    \def\qrrechnung@zahlungspflichtiger{
+      \ZPname \\
+      \ZPaddrA \\
+      \ZPaddrB
+      }
+    \StrSubstitute{\ZPname}{ }{\ }[\ZPnameQR]
+    \StrSubstitute{\ZPaddrA}{ }{\ }[\ZPaddrAQR]
+    \StrSubstitute{\ZPaddrB}{ }{\ }[\ZPaddrBQR]
+    \def\qrrechnung@zahlungspflichtigerQR{
+      K \?
+      \ZPnameQR \?
+      \ZPaddrAQR \?
+      \ZPaddrBQR \?
+      \?
+      \?
+      \ZPctry \?
+    }
+  }
+}
+
+% language option
+\newcommand{\qrrechnungLang}{de}
+\DeclareOption{de}{\renewcommand{\qrrechnungLang}{de}}
+\DeclareOption{fr}{\renewcommand{\qrrechnungLang}{fr}}
+\DeclareOption{it}{\renewcommand{\qrrechnungLang}{it}}
+\DeclareOption{en}{\renewcommand{\qrrechnungLang}{en}}
+\ProcessOptions\relax
+\def\qrrechnungLanguage#1{
+  \renewcommand{\qrrechnungLang}{#1}
+}
+
+\newcommand{\qrrechnungForm}{print}
+\DeclareOption{print}{\renewcommand{\qrrechnungForm}{print}}
+\DeclareOption{email}{\renewcommand{\qrrechnungForm}{email}}
+\ProcessOptions\relax
+\def\qrrechnungFormat#1{
+  \renewcommand{\qrrechnungForm}{#1}
+}
+
+\newcommand{\printQRrechnung}{
+  \qrrO@initialize
+  \qrrO@seplines
+
+  \qrrO@Etitle
+  \qrrO@Einformation
+  \qrrO@Eamount
+  \qrrO@Eacceptancepoint
+
+  \qrrO@Ptitle
+  \qrrO@Pqrcode
+  \qrrO@Pamount
+  \qrrO@Pinformation
+  \qrrO@Pfurtherinfo
+}

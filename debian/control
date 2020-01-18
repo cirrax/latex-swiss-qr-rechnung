@@ -1,0 +1,20 @@
+Source: latex-qrrechnung
+Section: tex
+Build-Depends: debhelper (>= 10),
+               tex-common,
+               texlive-latex-base,
+               texlive-latex-extra,
+               latexmk,
+               git,
+Priority: optional
+Maintainer: Benedikt Trefzer <benedikt.trefzer@cirrax.com>
+Standards-Version: 3.7.2
+
+Package: latex-qrrechnung
+Architecture: all
+Depends: texlive-latex-recommended, texlive-fonts-extra, ${misc:Depends}
+Description: This LaTeX package gives you the possibility to create a qr-bill 
+ with XeLaTeX. Th qr-bill is used in Switzerland and Switzerland only!
+ .
+ The QR-bill replaces the red and orange payment slips used in Switzerland
+ for years.

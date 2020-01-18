@@ -1,0 +1,9 @@
+Document: latex-qrrechnung-doc
+Title: Print an qr-bill (qr-rechnung) as it is used in Switzerland
+Author: Benedikt Trefzer benedikt.trefzer@cirrax.com
+Abstract: This manual describes what latex-qrrechnung is
+ and how it can be used 
+Section: Text
+
+Format: pdf
+Files: /usr/share/doc/texmf/latex-esr/latex-qrrechnung.pdf.gz

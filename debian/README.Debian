@@ -1,0 +1,11 @@
+latex-esr for Debian
+--------------------
+
+ - The esr package provides facilities to print on an inpayment slip with
+   reference number in Switzerland – so called “Einzahlungsschein mit Referen-
+   znummer” (ESR for short) on sheets with DIN A4 dimensions.
+
+ - latex-esr is fully documented under /usr/share/doc/texmf/latex-esr. 
+   To read documentations, use texdoc command.  Run `texdoc latex-esr'.
+
+ -- Benedikt Trefzer <benedikt.trefzer@cirrax.com>, Thu, 11 Apr 2013 00:24:16 +0900

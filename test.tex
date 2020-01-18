@@ -1,0 +1,44 @@
+\documentclass[
+          paper = a4paper,
+]{scrlttr2}
+\usepackage[ngerman]{babel}
+
+\usepackage[en]{qrrechnung}
+\usepackage{lipsum}
+\usepackage{qrrechnung-swico}
+
+\qrrechnungZahlungsempfaenger{Cirrax GmbH}{Schulhausgasse 2a}{3113 Rubigen}{CH}
+\qrrechnungSwicoMwstNr{246546457}
+
+\begin{document}
+  \newcommand\rechnung[9]{
+     \qrrechnungLanguage{#1}
+     \qrrechnungBetrag{#2}{CHF}
+     \qrrechnungIBAN{#3}
+     \qrrechnungReferenz{#4}{#5} 
+     \qrrechnungZahlungspflichtiger{#6}{#7}{#8}{CH}
+     \qrrechnungUnstrukturierteInfo{#9}
+     \qrrechnungSwicoBelegnummer{#5}
+     \qrrechnungRechnungsInfo{\qrrechnungSwico}
+     %\qrrechnungAVerfahrenA{ebill}{blahfsel}
+     %\qrrechnungAVerfahrenB{ebill}{blahfsel}
+
+     \printQRrechnung
+  }
+
+test:
+\rechnung{de}{123456789.00}{CH9530000001605763427}{QRR}{342343246}{James Bond}{bondstreet 007}{1200 Genève}{Rechnung: normal}
+     \pagebreak
+
+Normal:
+\rechnung{it}{1.00}{CH0123456789012345678}{QRR}{4}{James Bond}{Jungfraujoch 13}{3000 Bern}{Rechnung: normal}
+     \pagebreak
+Without Betrag
+\rechnung{de}{}{CH0123456789012345678}{QRR}{8502398520384034}{James Bond}{Jungfraujoch 13}{3000 Bern}{Rechung: ohne Betrag}
+     \pagebreak
+Without Zahlungspflichtiger
+\rechnung{en}{1000.00}{CH0123456789012345678}{SCOR}{RF234234}{}{Jungfraujoch 13}{3000 Bern}{Rechnung: ohne ZP}
+     \pagebreak
+Without Zahlungspflichtiger, Betrag
+\rechnung{de}{}{CH0123456789012345678}{QRR}{1234567890987654321}{}{Jungfraujoch 13}{3000 Bern}{Rechnung: ohne ZP, Betrag}
+\end{document}

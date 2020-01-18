@@ -1,0 +1,382 @@
+% \iffalse meta-comment
+% vim: textwidth=75
+%<*internal>
+\iffalse
+%</internal>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+-----------------------:| -------------------------------------------------
+qrrechnung-definitions: | generates the output for qrrechnung
+                 Author:| Benedikt Trefzer
+                 E-mail:| benedikt.trefzer@cirrax.com
+                License:| Released under the LaTeX Project Public License v1.3c or later
+                    See:| http://www.latex-project.org/lppl.txt
+\endpreamble
+\postamble
+
+Copyright (C) 2020 by Benedikt Trefzer, Cirrax GmbH <benedikt.trefzer@cirrax.com>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+(not set).
+
+This work consists of the file qrrechnung-output.dtx
+
+\endpostamble
+\usedir{tex/latex/qrrechnung-output}
+\generate{
+  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/qrrechnung-output}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+\usedir{doc/latex/qrrechnung-output}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{qrrechnung-output.dtx}
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<package>\ProvidesPackage{qrrechnung-output}
+%<*package>
+    [2020/02/06 v1.00 qrrechnung-output]
+%</package>
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[a4paper,margin=25mm,left=50mm,nohead]{geometry}
+\usepackage[numbered]{hypdoc}
+\usepackage{\jobname}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \GetFileInfo{\jobname.dtx}
+% \DoNotIndex{\newcommand,\newenvironment}
+%
+%\title{\textsf{qrrechnung-definitions} --- qrrechnung-output\thanks{This file
+%   describes version \fileversion, last revised \filedate.}
+%}
+%\author{Benedikt Trefzer, Cirrax GmbH\thanks{E-mail: benedikt.trefzer@cirrax.com}}
+%\date{Released \filedate}
+%
+%\maketitle
+%
+%\changes{v1.00}{2020/02/06}{First public release}
+%
+% \begin{abstract}
+% Provides commands for generating the output of a qrrechnung 
+% \end{abstract}
+%
+% \section{Usage}
+%
+% only used in qrrechnung.
+%
+%
+%\StopEventually{^^A
+%  \PrintChanges
+%  \PrintIndex
+%}
+%
+% \section{Implementation}
+%
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+
+%    \begin{macrocode}
+\RequirePackage{xstring}
+\RequirePackage{ifthen}
+\RequirePackage{tikz}
+\RequirePackage[absolute,overlay]{textpos}
+\RequirePackage{color}
+%    \end{macrocode}
+
+% \begin{macro}{\qrrO@initialize}
+% Initialzes several length used for the output
+%    \begin{macrocode}
+\newlength{\qrrechnung@space}                              % ident Left
+\newlength{\qrrechnung@qrcodesize}
+\newlength{\qrrechnung@columnOne}
+\newlength{\qrrechnung@columnTwo}
+\newlength{\qrrechnung@columnThree}
+
+\newcommand{\qrrO@initialize}{
+  % \TPoptions{showboxes=true}
+  \textblockorigin{\paperwidth - 210mm}{\paperheight - 105mm} % upper left corner of a6 zahlteil (without upper margin)
+
+  \setlength{\qrrechnung@space}{5mm}                         % minimum 5mm
+
+  \setlength{\qrrechnung@qrcodesize}{46 mm}                  % size of the qrcode
+
+  \setlength{\qrrechnung@columnOne}{52mm}                             % width of first column (Empfangsteil)
+  \setlength{\qrrechnung@columnTwo}{51mm}                             % width of second column (Zahlteil, Titel, QRCode Betrag )
+  \setlength{\qrrechnung@columnThree}{87mm } % width of third column (Bereich Angaben Zahlteil
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrO@textblock}
+% add textblock for text
+%    \begin{macrocode}
+\def\qrrO@textblock#1#2#3{
+    { \setlength{\parindent}{0pt} %\linespread{0.5}
+    \begin{textblock*}{#1}(#2)
+      #3
+    \end{textblock*}
+    }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrO@Etitle}
+% Receipt title section.
+%    \begin{macrocode}
+\newcommand{\qrrO@Etitle}{
+  \qrrO@textblock{\qrrechnung@columnOne}{\qrrechnung@space , 5 mm}{
+    \textblocklabel{Bereich Titel}
+    \qrr@formatTitle{\qrrT@Empfangsteil}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrO@Einformation}
+% Receipt information section.
+%    \begin{macrocode}
+\newcommand{\qrrO@Einformation}{
+  \qrrO@textblock{\qrrechnung@columnOne}{\qrrechnung@space , 12 mm}{
+    \textblocklabel{Bereich Angaben}
+    \qrr@printifE{\qrrT@Konto}{
+      \qrrechnung@iban\\
+      \qrrechnung@zahlungsempfaenger\\
+    }
+    \qrr@printifE{\qrrT@Referenz}{\qrrechnung@referenz}
+    \ifthenelse{\equal{}{\qrrechnung@zahlungspflichtiger}}{
+      \qrr@formatSubTitleE{\qrrT@ZahlungspflichtigerLeer}\\
+      \qrr@box{52mm}{20mm}
+      \qrr@formatTextE{}\
+    }
+    {
+      \qrr@formatSubTitleE{\qrrT@Zahlungspflichtiger}\\
+      \qrr@formatTextE{\qrrechnung@zahlungspflichtiger\\}
+    }
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrO@Eamount}
+% Receipt amount section.
+%    \begin{macrocode}
+
+\newcommand{\qrrO@Eamount}{
+  \qrrO@textblock{\qrrechnung@columnOne/4}{\qrrechnung@space , 68 mm}{
+    \textblocklabel{Bereich Betrag}
+    \qrr@formatSubTitleE{\qrrT@Waehrung}\\
+    \qrr@formatTextE{\qrrechnung@waehrung}
+  }
+
+  \ifthenelse{\equal{}{\qrrechnung@betrag}}{
+    \qrrO@textblock{5mm}{27mm , 68mm}{
+      \qrr@box{30mm}{10mm}
+    }
+  }
+
+  \qrrO@textblock{\qrrechnung@columnOne/4  + \qrrechnung@columnOne/4}{\qrrechnung@columnOne/4+\qrrechnung@space, 68mm}{
+    \textblocklabel{Bereich Betrag}
+    \qrr@formatSubTitleE{\qrrT@Betrag}\\
+    \ifthenelse{\equal{}{\qrrechnung@betrag}}{}{
+      \qrr@formatTextE{\qrr@paddingAmount{\qrrechnung@betrag}}
+    }
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrO@Eacceptancepoint}
+% Receipt acceptance point section.
+%    \begin{macrocode}
+\newcommand{\qrrO@Eacceptancepoint}{
+  \qrrO@textblock{\qrrechnung@columnOne}{\qrrechnung@space , 82 mm}{
+    \textblocklabel{Bereich Annahmestelle}
+    \raggedleft
+    \qrr@formatAnnahmestelle{\qrrT@Annahmestelle}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrO@Ptitle}
+% Payment part, title section
+%    \begin{macrocode}
+\newcommand{\qrrO@Ptitle}{
+  \qrrO@textblock{\qrrechnung@columnTwo}{\qrrechnung@columnOne + \qrrechnung@space*3 , 5 mm }{
+    \textblocklabel{Bereich Titel}
+    \qrr@formatTitle{\qrrT@Zahlteil}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{length definitions}
+% Payment part, swiss QR code section
+%    \begin{macrocode}
+\newcommand{\qrrO@Pqrcode}{
+  \qrrO@textblock{\qrrechnung@columnTwo-\qrrechnung@space}{\qrrechnung@columnOne + \qrrechnung@space*3 , 17mm}{
+    \textblocklabel{Bereich Swiss QR code}
+    \vspace{-1.4mm} % TODO: this should not be needed....
+    \hspace{-2.25mm}
+    \begin{tikzpicture}[node distance=0mm]
+      \node[label={[anchor=center, scale=1]center:{\includegraphics[width=7mm]{swisscross}}}] (qrc) {
+        \qrcode[height=46 mm , level=M, version=10, tight, nolink ]{
+          \qrr@qrcodetext
+	}
+      };
+    \end{tikzpicture}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrO@Pamount}
+% Payment part, amount section
+%    \begin{macrocode}
+\newcommand{\qrrO@Pamount}{
+  \qrrO@textblock{\qrrechnung@columnTwo/3 }{\qrrechnung@columnOne + \qrrechnung@space*3, 68mm }{
+    \textblocklabel{Bereich Betrag}
+    \qrr@formatSubTitleZ{\qrrT@Waehrung}\\
+    \qrr@formatTextZ{\qrrechnung@waehrung}
+  }
+
+  \ifthenelse{\equal{}{\qrrechnung@betrag}}{
+    \qrrO@textblock{40mm}{\qrrechnung@space*3 + \qrrechnung@columnOne +\qrrechnung@columnTwo -40mm, 71mm}{
+      \qrr@box{40mm}{15mm}
+    }
+  }
+
+  \qrrO@textblock{\qrrechnung@columnTwo/3  + \qrrechnung@columnTwo/3}{\qrrechnung@columnOne +\qrrechnung@columnTwo/3 + \qrrechnung@space*3, 68mm}{
+    \textblocklabel{Bereich Betrag}
+    \qrr@formatSubTitleZ{\qrrT@Betrag}\\
+    \ifthenelse{\equal{}{\qrrechnung@betrag}}{}{
+      \qrr@formatTextZ{\qrr@paddingAmount{\qrrechnung@betrag}}
+    }
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrO@Pfurtherinfo}
+% Payment part, further information section.
+%    \begin{macrocode}
+\newcommand{\qrrO@Pfurtherinfo}{
+  \qrrO@textblock{\qrrechnung@columnTwo + \qrrechnung@columnThree}{\qrrechnung@columnOne + \qrrechnung@space*3 , 90 mm }{
+    \textblocklabel{Further information section}
+    \ifthenelse{\not \equal{}{\qrrechnugn@AVerfahrenA}}{
+      \qrr@formatSubTitleZ{\qrrechnugn@AVerfahrenAname}\qrr@formatTextZ{\qrrechnugn@AVerfahrenA}\\
+    }
+    \qrr@formatSubTitleZ{\qrrechnugn@AVerfahrenBname}\qrr@formatTextZ{\qrrechnugn@AVerfahrenB}
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrO@Pinformation}
+% Payment part, information section.
+%    \begin{macrocode}
+\newcommand{\qrrO@Pinformation}{                               % print the title
+  \qrrO@textblock{\qrrechnung@columnThree}{\qrrechnung@space*3 + \qrrechnung@columnOne + \qrrechnung@columnTwo , 5mm }{
+    \textblocklabel{Bereich Angaben}
+    \qrr@printifZ{\qrrT@Konto}{
+      \qrrechnung@iban\\
+      \qrrechnung@zahlungsempfaenger\\
+    }
+    \qrr@printifZ{\qrrT@Referenz}{\qrrechnung@referenz}
+%
+    \ifthenelse{\isundefined{\qrrechnung@printzusatz}}{}{
+      \qrr@printifZ{\qrrT@ZusaetzlicheInformationen}{\qrrechnung@zusatzinfo}
+    }
+%
+    \ifthenelse{\equal{}{\qrrechnung@zahlungspflichtiger}}{
+      \qrr@formatSubTitleZ{\qrrT@ZahlungspflichtigerLeer}\\
+      \qrr@box{65mm}{25mm}
+      \qrr@formatTextZ{}\
+    }
+    {
+      \qrr@formatSubTitleZ{\qrrT@Zahlungspflichtiger}\\
+      \qrr@formatTextZ{\qrrechnung@zahlungspflichtiger\\}
+    }
+  }
+}
+
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrO@seplines}
+% Print separator lines with scissor (only for email Format) and ensures we have a white background.
+% The white background should also overwrite any defined footers !
+%    \begin{macrocode}
+\newcommand{\qrrO@seplines}{
+  \qrrO@textblock{210mm}{0mm , 0mm }{
+    \ifthenelse{\equal{\qrrechnungForm}{email}}{
+      \rule{\textwidth}{0.2pt}
+    }{~}
+    \colorbox{white}{\parbox[t][106mm]{210mm}{\rule{\textwidth}{0pt}}} % hack for white background ;)
+  }
+  \qrrO@textblock{2mm}{62mm , 0mm }{
+    \ifthenelse{\equal{\qrrechnungForm}{email}}{
+      \rule{0.2pt}{106mm}
+    }{~}
+  }
+  \ifthenelse{\equal{\qrrechnungForm}{email}}{
+    \qrrO@textblock{5mm}{5mm , -2mm }{
+      \colorbox{white}{\ding{34}} % scissor
+    }
+    \qrrO@textblock{4mm}{60mm , 5.5mm }{
+      \begin{turn}{90}
+        \colorbox{white}{\ding{34}} % scissor
+      \end{turn}
+    }
+  }
+}
+
+%    \end{macrocode}
+% \end{macro}
+
+\endinput
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+%\Finale

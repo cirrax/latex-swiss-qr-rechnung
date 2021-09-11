@@ -1,0 +1,506 @@
+
+
+
+% \iffalse meta-comment
+% vim: textwidth=75
+%<*internal>
+\iffalse
+%</internal>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+-----------------------:| -------------------------------------------------
+            qrrechnung: | Main style to print qrrechnung
+                 Author:| Benedikt Trefzer
+                 E-mail:| benedikt.trefzer@cirrax.com
+                License:| Released under the LaTeX Project Public License v1.3c or later
+                    See:| http://www.latex-project.org/lppl.txt
+\endpreamble
+\postamble
+
+Copyright (C) 2020 by Benedikt Trefzer, Cirrax GmbH <benedikt.trefzer@cirrax.com>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+(not set).
+
+This work consists of the file qrrechnung-translations.dtx
+
+\endpostamble
+\usedir{tex/latex/qrrechnung}
+\generate{
+  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/qrrechnung}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+\usedir{doc/latex/qrrechnung}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{qrrechnung.dtx}
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<package>\ProvidesPackage{qrrechnung}
+%<*package>
+    [2018/01/01 v0.0.1 'QR-Rechnung' positioning package]
+%</package>
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[a4paper,margin=25mm,left=50mm,nohead]{geometry}
+\usepackage[numbered]{hypdoc}
+\usepackage{\jobname}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \GetFileInfo{\jobname.dtx}
+% \DoNotIndex{\newcommand,\newenvironment}
+%
+%\title{\textsf{qrrechnung} --- A new LaTeX package\thanks{This file
+%   describes version \fileversion, last revised \filedate.}
+%}
+%\author{Benedikt Trefzer, Cirrax GmbH\thanks{E-mail: benedikt.trefzer@cirrax.com}}
+%\date{Released \filedate}
+%
+%\maketitle
+%
+%\changes{v1.00}{2020/02/06}{First public release}
+%
+% \begin{abstract}
+% Provides the api to print qrrechnung.
+% \end{abstract}
+%
+% \section{Usage}
+%
+% just use !
+%
+%
+%\StopEventually{^^A
+%  \PrintChanges
+%  \PrintIndex
+%}
+%
+% \section{Implementation}
+%
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+
+%    \begin{macrocode}
+%\RequirePackage[absolute,overlay,showboxes]{textpos}
+\RequirePackage{qrrechnung-translations}
+\RequirePackage{qrrechnung-definitions}
+\RequirePackage{qrrechnung-output}
+%\RequirePackage[absolute,overlay]{textpos}
+\RequirePackage{ifthen}
+\RequirePackage{calc}
+\RequirePackage{microtype}
+\RequirePackage[nolinks]{qrcode}
+\RequirePackage{fontspec}
+\RequirePackage{pifont}
+\RequirePackage{rotating}
+\RequirePackage{tikz}
+\RequirePackage{xstring}
+\RequirePackage{calc}
+%    \end{macrocode}
+
+
+% \begin{macro}{\qrrechnung@betrag}
+% set an empty default to avoid undefine if the amount is not set.
+%    \begin{macrocode}
+\def\qrrechnung@betrag{}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungBetrag}
+% Optional set the amount to insert into the qrrechnung. 
+%    \begin{macrocode}
+\def\qrrechnungBetrag#1#2{
+  \def\qrrechnung@betrag{#1}
+  \def\qrrechnung@betragQR{
+    #1 \?
+  }
+  \def\qrrechnung@waehrung{#2}
+  \def\qrrechnung@waehrungQR{
+    #2 \?
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungIBAN}
+%
+%    \begin{macrocode}
+\def\qrrechnungIBAN#1{
+  \StrDel{#1}{ }[\IbanZ]          % remove spaces
+  \StrLeft{\IbanZ}{21}[\Iban]     % ensure 21 chars
+  \StrLeft{\Iban}{4}[\IbanA]      % first quadrupel
+  \StrMid{\Iban}{5}{8}[\IbanB]
+  \StrMid{\Iban}{9}{12}[\IbanC]
+  \StrMid{\Iban}{13}{16}[\IbanD]
+  \StrMid{\Iban}{17}{20}[\IbanE]
+  \StrRight{\Iban}{1}[\IbanF]
+  \def\qrrechnung@iban{\IbanA\,\IbanB\,\IbanC\,\IbanD\,\IbanE\,\IbanF}
+  \def\qrrechnung@ibanQR{
+    \Iban \?
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungZahlungsempfaenger}
+% 1 Name (firstname + lastname or company name) (max 70 chars)
+% 2 address line 1
+% 3 postal code and town
+% 4 Two digit country code according to ISO-3166-1
+%
+% Remark: only combined format is supported currently
+%    \begin{macrocode}
+\def\qrrechnungZahlungsempfaenger#1#2#3#4{
+  \StrLeft{#1}{70}[\ZEname]
+  \StrLeft{#2}{70}[\ZEaddrA]
+  \StrLeft{#3}{70}[\ZEaddrB]
+  \StrLeft{#4}{2}[\ZEctry]
+  \def\qrrechnung@zahlungsempfaenger{
+    \ZEname \\
+    \ZEaddrA \\
+    \ZEaddrB
+  }
+  \StrSubstitute{\ZEname}{ }{\ }[\ZEnameQR]
+  \StrSubstitute{\ZEaddrA}{ }{\ }[\ZEaddrAQR]
+  \StrSubstitute{\ZEaddrB}{ }{\ }[\ZEaddrBQR]
+  \def\qrrechnung@zahlungsempfaengerQR{
+    K \?
+    \ZEnameQR \?
+    \ZEaddrAQR \?
+    \ZEaddrBQR \?
+    \?
+    \?
+    \ZEctry \?
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnung@referenzQR}
+%
+%    \begin{macrocode}
+\def\qrrechnung@referenzQR{
+  NON \?
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungReferenz}
+% 1 Reference type
+%    QRR: QR reference (26 characters, without check sum (will be calculated with latex)
+%    SCOR: Creditor refererence  (ISO 11649)
+%    NON: without reference
+% 2 reference either QRR or SCOR, ignored for NON
+%    \begin{macrocode}
+\def\qrrechnungReferenz#1#2{
+  \ifthenelse{\equal{#1}{QRR}}{
+    \StrLeft{#2}{26}[\Referenz]
+    \qrr@checksum{\Referenz} % defines \RefFull
+    \qrr@padqrref{\RefFull}  % defines \RefPadded
+    \def\qrrechnung@referenz{ 
+      \qrr@padding{5}{\RefPadded}{\,}\\
+    }
+    \def\qrrechnung@referenzQR{
+      QRR \?%
+      \RefPadded\?%
+    }
+  }{}
+  \ifthenelse{\equal{#1}{SCOR}}{
+    \StrLeft{#2}{25}[\Referenz]
+    \def\qrrechnung@referenz{\Referenz}
+    \def\qrrechnung@referenzQR{
+      SCOR \?
+      \Referenz \?
+    }
+  }{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnung@unstrukturierteinfoQR}
+%
+%    \begin{macrocode}
+\def\qrrechnung@unstrukturierteinfoQR{\?}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungUnstrukturierteInfo}
+%
+%    \begin{macrocode}
+\def\qrrechnungUnstrukturierteInfo#1{
+    \StrLeft{#1}{140}[\WI]
+    \StrSubstitute{\WI}{ }{\ }[\WIQR]
+  \def\qrrechnung@unstrukturierteinfoQR{
+    \WIQR \?
+  }
+  \def\qrrechnung@unstrukturierteinfo{\WI}
+  \def\qrrechnung@printzusatz{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnung@rechnungsinfoQR}
+%
+%    \begin{macrocode}
+\def\qrrechnung@rechnungsinfoQR{\?}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungRechnungsInfo}
+%
+%    \begin{macrocode}
+\def\qrrechnungRechnungsInfo#1{
+  \StrLeft{#1}{140}[\RI]
+  \def\qrrechnung@rechnungsinfoQR{
+    \RI \?
+  }
+  \def\qrrechnung@rechnungsinfo{\RI}
+  \def\qrrechnung@printzusatz{}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnung@zusatzinfo}
+%
+%    \begin{macrocode}
+\def\qrrechnung@zusatzinfo{
+  \ifthenelse{\isundefined{\qrrechnung@unstrukturierteinfo}{}}{}{
+    \qrrechnung@unstrukturierteinfo\\
+  }
+  \ifthenelse{\isundefined{\qrrechnung@rechnungsinfo}{}}{}{
+    \qrrechnung@rechnungsinfo\\
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnugn@AVerfahrenAQR}
+% preparation for alternatives, this will probably change !
+%    \begin{macrocode}
+\def\qrrechnugn@AVerfahrenAQR{} 
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\qrrechnugn@AVerfahrenA}
+% preparation for alternatives, this will probably change !
+%    \begin{macrocode}
+\def\qrrechnugn@AVerfahrenA{}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnugn@AVerfahrenAname}
+% preparation for alternatives, this will probably change !
+%    \begin{macrocode}
+\def\qrrechnugn@AVerfahrenAname{}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungAVerfahrenA}
+% preparation for alternatives, this will probably change !
+%    \begin{macrocode}
+\def\qrrechnungAVerfahrenA#1#2{
+  \StrLeft{#2}{100}[\AVerfahrenA]
+  \def\qrrechnugn@AVerfahrenAQR{
+    \AVerfahrenA \?
+  } 
+  \def\qrrechnugn@AVerfahrenA{
+    \AVerfahrenA
+  }
+  \def\qrrechnugn@AVerfahrenAname{
+    #1
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungAVerfahrenBQR}
+% preparation for alternatives, this will probably change !
+%    \begin{macrocode}
+\def\qrrechnugn@AVerfahrenBQR{}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungAVerfahrenBQR}
+% preparation for alternatives, this will probably change !
+%    \begin{macrocode}
+\def\qrrechnugn@AVerfahrenB{}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnugn@AVerfahrenBname}
+% preparation for alternatives, this will probably change !
+%    \begin{macrocode}
+\def\qrrechnugn@AVerfahrenBname{}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnugn@AVerfahrenB}
+% preparation for alternatives, this will probably change !
+%    \begin{macrocode}
+\def\qrrechnungAVerfahrenB#1#2{
+  \StrLeft{#2}{100}[\AVerfahrenB]
+  \def\qrrechnugn@AVerfahrenBQR{
+    \AVerfahrenB \?
+  } 
+  \def\qrrechnugn@AVerfahrenB{
+    \AVerfahrenB
+  }
+  \def\qrrechnugn@AVerfahrenBname{
+    #1
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+  
+
+% \begin{macro}{\qrrechnung@zahlungspflichtiger}
+% 
+%    \begin{macrocode}
+\def\qrrechnung@zahlungspflichtiger{}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnung@zahlungspflichtigerQR}
+% 
+%    \begin{macrocode}
+\def\qrrechnung@zahlungspflichtigerQR{}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungZahlungspflichtiger}
+% 1 Name (firstname + lastname or company name) (max 70 chars)
+% 2 address line 1
+% 3 postal code and town
+% 4 Two digit country code according to ISO-3166-1
+%
+% Remark: only combined format is supported currently
+% 
+%    \begin{macrocode}
+\def\qrrechnungZahlungspflichtiger#1#2#3#4{
+  \ifthenelse{\equal{#1}{}}{
+    \def\qrrechnung@zahlungspflichtiger{}
+    \def\qrrechnung@zahlungspflichtigerQR{
+    }
+  }{
+    \StrLeft{#1}{70}[\ZPname]
+    \StrLeft{#2}{70}[\ZPaddrA]
+    \StrLeft{#3}{70}[\ZPaddrB]
+    \StrLeft{#4}{2}[\ZPctry]
+    \def\qrrechnung@zahlungspflichtiger{
+      \ZPname \\
+      \ZPaddrA \\
+      \ZPaddrB
+      }
+    \StrSubstitute{\ZPname}{ }{\ }[\ZPnameQR]
+    \StrSubstitute{\ZPaddrA}{ }{\ }[\ZPaddrAQR]
+    \StrSubstitute{\ZPaddrB}{ }{\ }[\ZPaddrBQR]
+    \def\qrrechnung@zahlungspflichtigerQR{
+      K \?
+      \ZPnameQR \?
+      \ZPaddrAQR \?
+      \ZPaddrBQR \?
+      \?
+      \?
+      \ZPctry \?
+    }
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungLang}
+% language option
+%    \begin{macrocode}
+\newcommand{\qrrechnungLang}{de}
+\DeclareOption{de}{\renewcommand{\qrrechnungLang}{de}}
+\DeclareOption{fr}{\renewcommand{\qrrechnungLang}{fr}}
+\DeclareOption{it}{\renewcommand{\qrrechnungLang}{it}}
+\DeclareOption{en}{\renewcommand{\qrrechnungLang}{en}}
+\ProcessOptions\relax
+
+\def\qrrechnungLanguage#1{
+  \renewcommand{\qrrechnungLang}{#1}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrrechnungForm}
+% 
+%    \begin{macrocode}
+\newcommand{\qrrechnungForm}{print}
+\DeclareOption{print}{\renewcommand{\qrrechnungForm}{print}}
+\DeclareOption{email}{\renewcommand{\qrrechnungForm}{email}}
+\ProcessOptions\relax
+
+\def\qrrechnungFormat#1{
+  \renewcommand{\qrrechnungForm}{#1}
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\printQRrechnung}
+% 
+%    \begin{macrocode}
+\newcommand{\printQRrechnung}{
+  \qrrO@initialize
+  \qrrO@seplines
+
+  \qrrO@Etitle
+  \qrrO@Einformation
+  \qrrO@Eamount
+  \qrrO@Eacceptancepoint
+
+  \qrrO@Ptitle
+  \qrrO@Pqrcode
+  \qrrO@Pamount
+  \qrrO@Pinformation
+  \qrrO@Pfurtherinfo
+}
+%    \end{macrocode}
+% \end{macro}
+
+\endinput
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+%\Finale

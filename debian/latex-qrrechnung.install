@@ -1,17 +1,17 @@
 qrrechnung.sty usr/share/texmf/tex/latex/qrrechnung
-#qrrechnung.pdf usr/share/texmf/doc/latex/qrrechnung
+qrrechnung.pdf usr/share/doc/latex-qrrechnung
 
 qrrechnung-definitions.sty usr/share/texmf/tex/latex/qrrechnung
-qrrechnung-definitions.pdf usr/share/texmf/doc/latex/qrrechnung
+qrrechnung-definitions.pdf usr/share/doc/latex-qrrechnung
 
 qrrechnung-output.sty usr/share/texmf/tex/latex/qrrechnung
-qrrechnung-output.pdf usr/share/texmf/doc/latex/qrrechnung
+qrrechnung-output.pdf usr/share/doc/latex-qrrechnung
 
 qrrechnung-swico.sty usr/share/texmf/tex/latex/qrrechnung
-qrrechnung-swico.pdf usr/share/texmf/doc/latex/qrrechnung
+qrrechnung-swico.pdf usr/share/doc/latex-qrrechnung
 
 qrrechnung-translations.sty usr/share/texmf/tex/latex/qrrechnung
-qrrechnung-translations.pdf usr/share/texmf/doc/latex/qrrechnung
+qrrechnung-translations.pdf usr/share/doc/latex-qrrechnung
 
 swisscross.ai usr/share/texmf/tex/latex/qrrechnung
 swisscross.png usr/share/texmf/tex/latex/qrrechnung

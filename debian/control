@@ -1,14 +1,14 @@
 Source: latex-qrrechnung
 Section: tex
-Build-Depends: debhelper (>= 10),
+Build-Depends: debhelper (>= 12),
                tex-common,
-               texlive-latex-base,
-               texlive-latex-extra,
+               texlive-xetex,
+               texlive-fonts-recommended,
                latexmk,
                git,
 Priority: optional
 Maintainer: Benedikt Trefzer <benedikt.trefzer@cirrax.com>
-Standards-Version: 3.7.2
+Standards-Version: 4.5.1
 
 Package: latex-qrrechnung
 Architecture: all

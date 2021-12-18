@@ -1,4 +1,10 @@
-latex-qrrechnung (1.0) unstable; urgency=medium
+latex-qrrechnung (1.0.1-1) unstable; urgency=medium
+
+  * several adaptations
+
+ -- Benedikt Trefzer <benedikt.trefzer@cirrax.com>  Sun, 12 Sep 2021 19:21:26 +0200
+
+latex-qrrechnung (1.0.0-1) unstable; urgency=medium
 
   * Initial release
 

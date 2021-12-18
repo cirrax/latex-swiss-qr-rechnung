@@ -1,1 +1,8 @@
-readme
+# Swiss QR-Bill using latex
+
+This latex code let's you generate a QR-Bill.
+You can generate some sample invoices with the file test.tex.
+
+## Important:
+pdflatex is not supported for the qrcode generation, you need to use xelatex !
+

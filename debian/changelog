@@ -1,3 +1,10 @@
+latex-qrrechnung (1.0.2-1) unstable; urgency=medium
+
+  * update readme
+  * ensure text length for additional info is not to long
+
+ -- Benedikt Trefzer <benedikt.trefzer@cirrax.com>  Sat, 18 Dec 2021 21:24:37 +0100
+
 latex-qrrechnung (1.0.1-1) unstable; urgency=medium
 
   * several adaptations

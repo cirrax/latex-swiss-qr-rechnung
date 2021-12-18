@@ -273,21 +273,29 @@ This work consists of the file qrrechnung-translations.dtx
 % \end{macro}
 
 % \begin{macro}{\qrrechnung@rechnungsinfoQR}
-%
+% empty definition for QR code
 %    \begin{macrocode}
 \def\qrrechnung@rechnungsinfoQR{\?}
 %    \end{macrocode}
 % \end{macro}
 
 % \begin{macro}{\qrrechnungRechnungsInfo}
-%
+% print maximal 140 characters in QR code
+% print maximal 53 chars on paper
+% if more, print 50 chars and '...' at end of line
 %    \begin{macrocode}
 \def\qrrechnungRechnungsInfo#1{
+  \StrLen{#1}[\len]
   \StrLeft{#1}{140}[\RI]
+  \StrLeft{#1}{50}[\RIS]
   \def\qrrechnung@rechnungsinfoQR{
     \RI \?
   }
-  \def\qrrechnung@rechnungsinfo{\RI}
+  \ifnum\len<53%
+    \def\qrrechnung@rechnungsinfo{\RI}
+  \else
+    \def\qrrechnung@rechnungsinfo{\RIS...}
+  \fi
   \def\qrrechnung@printzusatz{}
 }
 %    \end{macrocode}

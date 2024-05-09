@@ -241,7 +241,7 @@ This work consists of the file qrrechnung-translations.dtx
   }{}
   \ifthenelse{\equal{#1}{SCOR}}{
     \StrLeft{#2}{25}[\Referenz]
-    \def\qrrechnung@referenz{\Referenz}
+    \def\qrrechnung@referenz{\qrr@paddingscor{\Referenz}}
     \def\qrrechnung@referenzQR{
       SCOR \?
       \Referenz \?

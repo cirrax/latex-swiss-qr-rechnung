@@ -249,7 +249,7 @@ This work consists of the file qrrechnung-translations.dtx
 % \end{macro}
 
 % \begin{macro}{\qrr@padding}
-% Macro to make groups of strings eg. to properly display referencenumber.
+% Macro to make groups of strings eg. to properly display ESR referencenumber.
 % Starts on the right and inserts a delimiter (usually a space).
 % Parameters: number of chars to group together; string; char to use for padding;
 %    \begin{macrocode}
@@ -264,6 +264,27 @@ This work consists of the file qrrechnung-translations.dtx
    \ifnum\value{qrrCpadding} > 0
    \repeat
    \pb
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\qrr@paddingscor}
+% Macro to make groups of strings eg. to properly display SCOR referencenumber.
+% Starts on the left and inserts a space as delimiter every 4 chars.
+% Parameters: string to pad
+%    \begin{macrocode}
+\newcounter{qrscorpadding}
+\def\qrr@paddingscor#1{
+   \setcounter{qrscorpadding}{4}
+   \StrLen{#1}[\len]
+   \StrSplit{#1}{\numexpr \len}{\pa}{\pb}
+   \loop
+     \StrSplit{\pa{\,}\pb}{ \value{qrscorpadding} }{\pa}{\pb}
+     \StrLen{\pa{\,}\pb}[\len]
+     \addtocounter{qrscorpadding}{5}
+   \ifnum\value{qrscorpadding} <  \numexpr \len
+   \repeat
+   \pa\,\pb
 }
 %    \end{macrocode}
 % \end{macro}

@@ -404,9 +404,18 @@ This work consists of the file qrrechnung-translations.dtx
 % \end{macro}
 
 % \begin{macro}{\qrrechnung@zahlungspflichtigerQR}
+% default if not defined are empty lines in qrcode   
 % 
 %    \begin{macrocode}
-\def\qrrechnung@zahlungspflichtigerQR{}
+\def\qrrechnung@zahlungspflichtigerQR{
+      \?
+      \?
+      \?
+      \?
+      \?
+      \?
+      \?
+}
 %    \end{macrocode}
 % \end{macro}
 
@@ -422,8 +431,6 @@ This work consists of the file qrrechnung-translations.dtx
 \def\qrrechnungZahlungspflichtiger#1#2#3#4{
   \ifthenelse{\equal{#1}{}}{
     \def\qrrechnung@zahlungspflichtiger{}
-    \def\qrrechnung@zahlungspflichtigerQR{
-    }
   }{
     \StrLeft{#1}{70}[\ZPname]
     \StrLeft{#2}{70}[\ZPaddrA]

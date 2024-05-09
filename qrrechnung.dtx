@@ -210,10 +210,11 @@ This work consists of the file qrrechnung-translations.dtx
 % \end{macro}
 
 % \begin{macro}{\qrrechnung@referenzQR}
-%
+% 1 Default is no reference code (type NON)
 %    \begin{macrocode}
 \def\qrrechnung@referenzQR{
   NON \?
+  \?
 }
 %    \end{macrocode}
 % \end{macro}
@@ -222,8 +223,8 @@ This work consists of the file qrrechnung-translations.dtx
 % 1 Reference type
 %    QRR: QR reference (26 characters, without check sum (will be calculated with latex)
 %    SCOR: Creditor refererence  (ISO 11649)
-%    NON: without reference
-% 2 reference either QRR or SCOR, ignored for NON
+%    NON: without reference (default)
+% 2 reference either QRR or SCOR, ignored for NON since default
 %    \begin{macrocode}
 \def\qrrechnungReferenz#1#2{
   \ifthenelse{\equal{#1}{QRR}}{

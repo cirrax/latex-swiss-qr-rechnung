@@ -221,10 +221,13 @@ This work consists of the file qrrechnung-translations.dtx
 
 % \begin{macro}{\qrrechnungReferenz}
 % 1 Reference type
-%    QRR: QR reference (26 characters, without check sum (will be calculated with latex)
-%    SCOR: Creditor refererence  (ISO 11649)
+%    QRR: QR reference (26 characters, without checksum (will be calculated with latex)
+%         use digits only, checksum prefixed
+%    SCOR: Creditor refererence  (ISO 11649), without checksum (will be calculated with latex)
+%         use digits and charakters A-Z, lowercase chars will be ignored !
+%         checksum is postfixed (four chars), format RFxx
 %    NON: without reference (default)
-% 2 reference either QRR or SCOR, ignored for NON since default
+% 2 reference without checksum, ignored for NON since default
 %    \begin{macrocode}
 \def\qrrechnungReferenz#1#2{
   \ifthenelse{\equal{#1}{QRR}}{
@@ -241,10 +244,11 @@ This work consists of the file qrrechnung-translations.dtx
   }{}
   \ifthenelse{\equal{#1}{SCOR}}{
     \StrLeft{#2}{25}[\Referenz]
-    \def\qrrechnung@referenz{\qrr@paddingscor{\Referenz}}
+    \qrr@scorchecksum{\Referenz} % defines \RefFull
+    \def\qrrechnung@referenz{\qrr@paddingscor{\RefFull}}
     \def\qrrechnung@referenzQR{
       SCOR \?
-      \Referenz \?
+      \RefFull \?
     }
   }{}
 }

@@ -311,7 +311,72 @@ This work consists of the file qrrechnung-translations.dtx
    \def\RefPadded{#1}%
  \fi
 }
+%    \end{macrocode}
+% \end{macro}
 
+% \begin{macro}{\qrr@scorchecksum}
+% caclulate return SCOR with checksum
+% SCOR checksum is calculated with mod 97
+% and postfixed to referenc (format RFXX)
+%    \begin{macrocode}
+\newcounter{scorchecksumX}
+\newcounter{scorchecksum}
+\newcommand{\qrr@scorchecksum}[1]{
+  \def\scorinnumbers{}
+  \setcounter{scorchecksumX}{0}
+  \StrLen{#1RF00}[\reflen]
+  % first loop: use numers for charakters
+  \loop
+     \addtocounter{scorchecksumX}{1}
+     \StrChar{#1RF00}{\value{scorchecksumX}}[\scorchar]
+     \IfStrEq{A}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 10}}{}
+     \IfStrEq{B}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 11}}{}
+     \IfStrEq{C}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 12}}{}
+     \IfStrEq{D}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 13}}{}
+     \IfStrEq{E}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 14}}{}
+     \IfStrEq{F}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 15}}{}
+     \IfStrEq{G}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 16}}{}
+     \IfStrEq{H}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 17}}{}
+     \IfStrEq{I}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 18}}{}
+     \IfStrEq{J}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 19}}{}
+     \IfStrEq{K}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 20}}{}
+     \IfStrEq{L}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 21}}{}
+     \IfStrEq{M}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 22}}{}
+     \IfStrEq{N}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 23}}{}
+     \IfStrEq{O}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 24}}{}
+     \IfStrEq{P}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 25}}{}
+     \IfStrEq{Q}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 26}}{}
+     \IfStrEq{R}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 27}}{}
+     \IfStrEq{S}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 28}}{}
+     \IfStrEq{T}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 29}}{}
+     \IfStrEq{U}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 30}}{}
+     \IfStrEq{V}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 31}}{}
+     \IfStrEq{W}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 32}}{}
+     \IfStrEq{X}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 33}}{}
+     \IfStrEq{Y}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 34}}{}
+     \IfStrEq{Z}{\scorchar}{ \edef\scorinnumbers{\scorinnumbers 35}}{}
+
+     \IfInteger{\scorchar}{\edef\scorinnumbers{\scorinnumbers \scorchar}}
+
+     \ifnum\value{scorchecksumX} < \reflen
+  \repeat
+
+  % second loop calculate the modulo (97 is a prime number)
+  \StrLen{\scorinnumbers}[\reflen]
+  \setcounter{scorchecksumX}{0}
+  \setcounter{scorchecksum}{0}
+  \loop
+    \addtocounter{scorchecksumX}{1}
+    \StrChar{\scorinnumbers}{\value{scorchecksumX}}[\mychar]
+    \setcounter{scorchecksum}{\the\numexpr\value{scorchecksum}*10 + \mychar}
+    \setcounter{scorchecksum}{\value{scorchecksum} - (\value{scorchecksum}/97)*97}
+  \ifnum\value{scorchecksumX} < \reflen
+  \repeat
+
+  % take the difference of 98 and pad with 0 to ensure two digits
+  \setcounter{scorchecksum}{98 - \value{scorchecksum}}
+  \def\RefFull{RF\ifnum\value{scorchecksum}<10 0\fi\arabic{scorchecksum}#1}
+}
 %    \end{macrocode}
 % \end{macro}
 

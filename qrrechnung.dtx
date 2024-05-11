@@ -190,7 +190,7 @@ This work consists of the file qrrechnung-translations.dtx
   \StrLeft{#4}{2}[\ZEctry]
   \def\qrrechnung@zahlungsempfaenger{
     \ZEname \\
-    \ifx\ZEaddrA\blank \ZEaddrA \\ \fi
+    \ZEaddrA \\
     \ZEaddrB
   }
   \StrSubstitute{\ZEname}{ }{\ }[\ZEnameQR]
@@ -442,7 +442,7 @@ This work consists of the file qrrechnung-translations.dtx
     \StrLeft{#4}{2}[\ZPctry]
     \def\qrrechnung@zahlungspflichtiger{
       \ZPname \\
-      \ifx\ZPaddrA\blank \ZPaddrA \\ \fi
+      \ZPaddrA \\
       \ZPaddrB
       }
     \StrSubstitute{\ZPname}{ }{\ }[\ZPnameQR]

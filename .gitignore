@@ -7,3 +7,9 @@
 *.out
 *.pdf
 *.dvi
+*.fdb_latexmk
+*.fls
+*.ilg
+*.ind
+*.sty
+*.xdv

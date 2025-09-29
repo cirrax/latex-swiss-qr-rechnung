@@ -12,13 +12,12 @@
 \qrrechnungSwicoMwstNr{246546457}
 
 \begin{document}
-  \newcommand\rechnung[9]{
+  \newcommand\rechnung[6]{
      \qrrechnungLanguage{#1}
      \qrrechnungBetrag{#2}{CHF}
      \qrrechnungIBAN{#3}
      \qrrechnungReferenz{#4}{#5} 
-     \qrrechnungZahlungspflichtiger{#6}{#7}{#8}{CH}
-     \qrrechnungUnstrukturierteInfo{#9}
+     \qrrechnungUnstrukturierteInfo{#6}
      \qrrechnungSwicoBelegnummer{#5}
      \qrrechnungRechnungsInfo{\qrrechnungSwico}
      %\qrrechnungAVerfahrenA{ebill}{blahfsel}
@@ -28,18 +27,23 @@
   }
 
 Testrechnung:
-\rechnung{de}{123456789.00}{CH9530000001605763427}{QRR}{342343246}{James Bond}{bondstreet 007}{1200 Genève}{Rechnung: normal}
+\qrrechnungZahlungspflichtiger{James Bond}{bondstreet}{007}{1200}{Genève}{CH}
+\rechnung{de}{123456789.00}{CH9530000001605763427}{QRR}{342343246}{Rechnung: normal}
      \pagebreak
 
 Normal:
-\rechnung{it}{1.00}{CH0123456789012345678}{QRR}{4}{James Bond}{Jungfraujoch 13}{3000 Bern}{Rechnung: normal}
+\qrrechnungZahlungspflichtiger{James Bond}{bondstreet}{007}{3000}{Bern}{CH}
+\rechnung{it}{1.00}{CH0123456789012345678}{QRR}{4}{Rechnung: normal}
      \pagebreak
 Without Betrag
-\rechnung{de}{}{CH0123456789012345678}{QRR}{8502398520384034}{James Bond}{Jungfraujoch 13}{3000 Bern}{Rechung: ohne Betrag}
+\qrrechnungZahlungspflichtiger{James Bond}{bondstreet}{007}{3000}{Bern}{CH}
+\rechnung{de}{}{CH0123456789012345678}{QRR}{8502398520384034}{Rechung: ohne Betrag}
      \pagebreak
 Without Zahlungspflichtiger
-\rechnung{en}{1000.00}{CH0123456789012345678}{SCOR}{RF234234}{}{Jungfraujoch 13}{3000 Bern}{Rechnung: ohne ZP}
+\qrrechnungZahlungspflichtiger{}{bondstreet}{007}{3000}{Bern}{CH}
+\rechnung{en}{1000.00}{CH0123456789012345678}{SCOR}{RF234234}{Rechnung: ohne ZP}
      \pagebreak
 Without Zahlungspflichtiger, Betrag
-\rechnung{de}{}{CH0123456789012345678}{QRR}{1234567890987654321}{}{Jungfraujoch 13}{3000 Bern}{Rechnung: ohne ZP, Betrag}
+\qrrechnungZahlungspflichtiger{}{bondstreet}{007}{3000}{Bern}{CH}
+\rechnung{de}{}{CH0123456789012345678}{QRR}{1234567890987654321}{Rechnung: ohne ZP, Betrag}
 \end{document}

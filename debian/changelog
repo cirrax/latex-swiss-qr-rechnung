@@ -1,3 +1,11 @@
+latex-qrrechnung (2.0.0-1) unstable; urgency=medium
+
+  * adapt for new reuirements of QR rechnung from august  2025
+    this is a breaking change since addresses must now be provided structured
+  * update copyright
+
+ -- Benedikt Trefzer <benedikt.trefzer@cirrax.com>  Mon, 29 Sep 2025 14:18:57 +0200
+
 latex-qrrechnung (1.1.1-1) unstable; urgency=medium
 
   * revert: remove newline for empty address line (does not work)

@@ -432,36 +432,43 @@ This work consists of the file qrrechnung-translations.dtx
 
 % \begin{macro}{\qrrechnungZahlungspflichtiger}
 % 1 Name (firstname + lastname or company name) (max 70 chars)
-% 2 address line 1
-% 3 postal code and town
-% 4 Two digit country code according to ISO-3166-1
+% 2 Street (max 70 chars)
+% 3 BuildingNumber (max 16 chars)
+% 4 PLZ (max 16 chars)
+% 5 Town (max 35 chars)
+% 6 Two digit country code according to ISO-3166-1
 %
-% Remark: only combined format is supported currently
-% 
+% Remark: According to release 2.3 from august 2025
+% only structured address format is allowed.
+%
 %    \begin{macrocode}
-\def\qrrechnungZahlungspflichtiger#1#2#3#4{
+\def\qrrechnungZahlungspflichtiger#1#2#3#4#5#6{
   \ifthenelse{\equal{#1}{}}{
     \def\qrrechnung@zahlungspflichtiger{}
   }{
     \StrLeft{#1}{70}[\ZPname]
-    \StrLeft{#2}{70}[\ZPaddrA]
-    \StrLeft{#3}{70}[\ZPaddrB]
-    \StrLeft{#4}{2}[\ZPctry]
+    \StrLeft{#2}{70}[\ZPSrtNm]
+    \StrLeft{#3}{16}[\ZPBldgNb]
+    \StrLeft{#4}{16}[\ZPPstCd]
+    \StrLeft{#5}{25}[\ZPTwnNm]
+    \StrLeft{#6}{2}[\ZPctry]
     \def\qrrechnung@zahlungspflichtiger{
       \ZPname \\
-      \ZPaddrA \\
-      \ZPaddrB
+      \ZPSrtNm~\ZPBldgNb \\
+      \ZPPstCd~\ZPTwnNm
       }
     \StrSubstitute{\ZPname}{ }{\ }[\ZPnameQR]
-    \StrSubstitute{\ZPaddrA}{ }{\ }[\ZPaddrAQR]
-    \StrSubstitute{\ZPaddrB}{ }{\ }[\ZPaddrBQR]
+    \StrSubstitute{\ZPSrtNm}{ }{\ }[\ZPSrtNmQR]
+    \StrSubstitute{\ZPBldgNb}{ }{\ }[\ZPBldgNbQR]
+    \StrSubstitute{\ZPPstCd}{ }{\ }[\ZPPstCdQR]
+    \StrSubstitute{\ZPTwnNm}{ }{\ }[\ZPTwnNmQR]
     \def\qrrechnung@zahlungspflichtigerQR{
-      K \?
+      S \?
       \ZPnameQR \?
-      \ZPaddrAQR \?
-      \ZPaddrBQR \?
-      \?
-      \?
+      \ZPSrtNmQR \?
+      \ZPBldgNbQR \?
+      \ZPPstCd \?
+      \ZPTwnNm \?
       \ZPctry \?
     }
   }
